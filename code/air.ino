@@ -8,10 +8,10 @@ const char* WIFI_SSID = "IT911";
 const char* WIFI_PASSWORD = "OsamaBenLaden2011";
 
 // ================= BACKEND ENDPOINTS =================
-const char* TEMP_ENDPOINT = "http://95.182.118.204/api/temperature";
-const char* HUM_ENDPOINT  = "http://95.182.118.204/api/humidity";
-const char* GAS_ENDPOINT  = "http://95.182.118.204/api/gas";
-const char* RAIN_ENDPOINT = "http://95.182.118.204/api/rain";
+const char* TEMP_ENDPOINT = "http://95.182.118.204:8000/api/temperature";
+const char* HUM_ENDPOINT  = "http://95.182.118.204:8000/api/humidity";
+const char* GAS_ENDPOINT  = "http://95.182.118.204:8000/api/gas";
+const char* RAIN_ENDPOINT = "http://95.182.118.204:8000/api/rain";
 
 // Digital Pins 
 #define DHTPIN 17
