@@ -7,12 +7,12 @@ const char* WIFI_SSID = "IT911";
 const char* WIFI_PASSWORD = "OsamaBenLaden2011";
 
 // ================= BACKEND =================
-const char* IRRIGATION_ENDPOINT = "http://192.168.0.200:8000/api/irrigation";
-const char* SOIL_ENDPOINT       = "http://192.168.0.200:8000/api/soil";
+const char* IRRIGATION_ENDPOINT = "http://95.182.118.204:8000/api/irrigation";
+const char* SOIL_ENDPOINT       = "http://95.182.118.204:8000/api/soil";
 
 // ================= WEBSOCKET =================
 WebSocketsClient webSocket;
-const char* WS_HOST = "192.168.0.200";
+const char* WS_HOST = "95.182.118.204";
 const int   WS_PORT = 8000;
 const char* WS_PATH = "/ws/water";
 

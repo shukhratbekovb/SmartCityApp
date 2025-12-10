@@ -8,9 +8,9 @@
 const char* ssid = "IT911";
 const char* password = "OsamaBenLaden2011";
 
-const char* ws_host = "192.168.1.200";
+const char* ws_host = "95.182.118.204";
 const int ws_port = 8000;
-const char* ws_path = "/ws/traffic";
+const char* ws_path = "/ws/";
 
 WebSocketsClient webSocket;
 
@@ -38,6 +38,13 @@ void webSocketEvent(WStype_t type, uint8_t* payload, size_t length) {
 
     if (msg == "PRIORITY:ON")  priority = true;
     if (msg == "PRIORITY:OFF") priority = false;
+    if (msg == "PRIORITY:STATUS") {
+      if (priority) {
+        webSocket.sendTXT("PRIORITY:ON");
+      } else {
+        webSocket.sendTXT("PRIORITY:OFF");
+      }
+    }
   }
 }
 

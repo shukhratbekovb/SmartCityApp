@@ -8,10 +8,10 @@ const char* WIFI_SSID = "IT911";
 const char* WIFI_PASSWORD = "OsamaBenLaden2011";
 
 // ================= BACKEND ENDPOINTS =================
-const char* TEMP_ENDPOINT = "http://192.168.0.200:8000/api/temperature";
-const char* HUM_ENDPOINT  = "http://192.168.0.200:8000/api/humidity";
-const char* GAS_ENDPOINT  = "http://192.168.0.200:8000/api/gas";
-const char* RAIN_ENDPOINT = "http://192.168.0.200:8000/api/rain";
+const char* TEMP_ENDPOINT = "http://95.182.118.204/api/temperature";
+const char* HUM_ENDPOINT  = "http://95.182.118.204/api/humidity";
+const char* GAS_ENDPOINT  = "http://95.182.118.204/api/gas";
+const char* RAIN_ENDPOINT = "http://95.182.118.204/api/rain";
 
 // Digital Pins 
 #define DHTPIN 17
@@ -57,17 +57,19 @@ int readLightLevel() {
 
 void proccessLight() {
     int lightLevel = readLightLevel();
-    
+    Serial.println("Light");
     if (autoMode) {
+      Serial.println(lightLevel);
         if (lightLevel == HIGH) {
             turnOnLight();
         } else {
             turnOffLight();
         }
     }
-    sendLightLevel(lightLevel);
-    sendLightStatus();
-    sendLightMode();
+
+    // sendLightLevel(lightLevel);
+    // sendLightStatus();
+    // sendLightMode();
 }
 
 void sendLightStatus() {
@@ -177,19 +179,48 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
     String msg = String((char*)payload);
     Serial.println("WS -> " + msg);
 
-    if (msg.indexOf("\"type\":\"mode\"") >= 0) {
-      if (msg.indexOf("auto") >= 0)   autoMode = true;
-      if (msg.indexOf("manual") >= 0) autoMode = false;
+    // ======== ЗАПРОС РЕЖИМА =========
+    if (msg == "LIGHT:MODE") {
+      if (autoMode) {
+        webSocket.sendTXT("LIGHT:AUTO");
+      } else {
+        webSocket.sendTXT("LIGHT:MANUAL");
+      }
     }
 
-    if (msg.indexOf("\"type\":\"light\"") >= 0) {
-      if (msg.indexOf("1") >= 0) turnOnLight();
-      if (msg.indexOf("0") >= 0) turnOffLight();
+    // ======== УСТАНОВКА РЕЖИМА =========
+    if (msg == "LIGHT:AUTO") {
+      autoMode = true;
+      webSocket.sendTXT("LIGHT:AUTO");
+    }
+
+    if (msg == "LIGHT:MANUAL") {
+      autoMode = false;
+      webSocket.sendTXT("LIGHT:MANUAL");
+    }
+    if (msg=="LIGHT:INFO"){
+      if (isLight) {
+        webSocket.sendTXT("LIGHT:ON");
+      }
+      else {
+        webSocket.sendTXT("LIGHT:OFF");
+      }
+    }
+    // ======== УПРАВЛЕНИЕ СВЕТОМ (ТОЛЬКО В MANUAL) =========
+    if (!autoMode) {
+      if (msg == "LIGHT:ON") {
+        turnOnLight();
+      }
+
+      if (msg == "LIGHT:OFF") {
+        turnOffLight();
+      }
     }
   }
 }
+
 void startWebSocket() {
-  webSocket.begin("192.168.0.200", 8000, "/ws/light");
+  webSocket.begin("95.182.118.204", 8000, "/ws/");
   webSocket.onEvent(webSocketEvent);
 }
 
